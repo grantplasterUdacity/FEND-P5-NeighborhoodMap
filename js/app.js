@@ -125,11 +125,13 @@ var ViewModel = function () {
 		if (list.length > 0) {
 			for (var item in list) {
 				var check = list[item];
+				var toggler = $('li').children()[check.index];
+
 				if (check.name.indexOf(string) === -1) {
-					$('li').children()[check.index].style.visibility = "hidden";
+					toggler.style.display = "none";
 				}
 				else {
-					$('li').children()[check.index].style.visibility = "visible";
+					toggler.style.display = "block";
 				}
 			}
 		}

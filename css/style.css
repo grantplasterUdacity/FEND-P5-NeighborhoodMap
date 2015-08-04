@@ -1,5 +1,10 @@
+body {
+	padding: 5px;
+	background-color: rgb(150, 152, 175);
+}
+
 #searchbar {
-	background-color: rgb(75, 200, 255);
+	padding-bottom: 5px;
 }
 
 .appArea {
@@ -9,7 +14,7 @@
 }
 
 #listView {
-	background-color: rgb(255, 50, 50);
+	background-color: rgb(255, 255, 255);
 	width: 20%;
 	position: relative;
 }
@@ -20,17 +25,16 @@ ul {
 	text-align: left;
 }
 
-li {
+a {
 	padding-bottom: 0.5em;
 }
 
 #mapdiv {
-	background-color: rgb(75, 255, 75);
 	width: 80%;
 }
 
 @media only screen and (max-width: 480px) {
   body { font-size: 12px;}
-  li {padding-bottom: 1em;}
-  ul {right: 20px;}
+  a {padding-bottom: 1em;}
+  ul {right: 15px;}
 }
