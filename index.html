@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+	<title>Project 5: Neighborhood Map</title>
+
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+	<div id="searchbar">
+		<form data-bind="submit: addListItem">
+			Search: <input id="search" type="search" data-bind="textInput: searchTerm" size="65">
+		</form>
+	</div>
+
+	<div class="appArea">
+		<div id="listView">
+			<ul id="item-list" data-bind="foreach: myList">
+				<li>
+					<a href="#" data-bind="text: name, click: $parent.computeIndex">&nbsp;</a>
+				</li>
+			</ul>
+		</div>
+
+		<div id="mapdiv">
+		</div>
+	</div>
+
+	<script src="js/jquery.js"></script>
+	<script src="js/knockout-3.3.0.js"></script>
+	<script src="js/app.js"></script>
+</body>
+
+</html>
