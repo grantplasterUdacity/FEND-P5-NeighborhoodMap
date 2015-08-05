@@ -11,6 +11,9 @@
 </head>
 
 <body>
+	<div id="displayHead">
+		<h1>Neighborhood Map</h1>
+	</div>
 	<div id="searchbar">
 		<form data-bind="submit: addListItem">
 			Search: <input id="search" type="search" data-bind="textInput: searchTerm" size="65">
@@ -30,9 +33,12 @@
 		</div>
 	</div>
 
-	<script src="js/jquery.js"></script>
-	<script src="js/knockout-3.3.0.js"></script>
-	<script src="js/app.js"></script>
+	<script async src="js/jquery.js"></script>
+	<script async src="js/bootstrap.min.js"></script>
+	<script src="js/oauth-signature.js"></script>
+	<script async src='js/bootbox.min.js'></script>
+	<script async src="js/knockout-3.3.0.js"></script>
+	<script async src="js/app.js"></script>
 </body>
 
 </html>

@@ -3,6 +3,13 @@ body {
 	background-color: rgb(150, 152, 175);
 }
 
+#displayHead {
+	color: #941818;
+	font-size: 16pt;
+	width: 100%;
+	text-align: center;
+}
+
 #searchbar {
 	padding-bottom: 5px;
 }
@@ -13,10 +20,37 @@ body {
 	height: 500px;
 }
 
+.dialog-wrapper {
+	background-color: white;
+	color: black;
+	position: relative;
+	width: 50%;
+	height: 50%;
+	z-index: 1041;
+	margin-left: 30%;
+	margin-top: 30%;
+	outline: solid black 2px;
+}
+
+.modal {
+	position: absolute;
+	margin-top: 0;
+	top: 20%;
+	/*overflow: visible; /* allow content to popup out (i.e tooltips) */
+	background-color: white;
+	outline: solid black 3px;
+}
+
+#mapdiv {
+	width: 80%;
+	outline: solid black 2px;
+}
+
 #listView {
 	background-color: rgb(255, 255, 255);
 	width: 20%;
 	position: relative;
+	outline: solid black 2px;
 }
 
 ul {
@@ -29,12 +63,24 @@ a {
 	padding-bottom: 0.5em;
 }
 
-#mapdiv {
-	width: 80%;
-}
-
 @media only screen and (max-width: 480px) {
-  body { font-size: 12px;}
-  a {padding-bottom: 1em;}
-  ul {right: 15px;}
+	body { font-size: 12px;}
+	#displayHead {
+		color: #941818;
+		font-size: 12pt;
+	}
+	a {padding-bottom: 1em;}
+	ul {right: 15px;}
+	.dialog-wrapper {
+	}
+
+	.modal {
+		background-color: white;
+		position: absolute;
+		margin-top: 0;
+		top: 20%;
+		overflow: visible; /* allow content to popup out (i.e tooltips) */
+		background-color: white;
+		outline: solid black 3px;
+	}
 }
