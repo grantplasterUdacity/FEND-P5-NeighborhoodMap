@@ -1,6 +1,11 @@
+'use strict';
+
+var globalMap, globalIndex;
+
 var myMap = function () {
 	var self = this;
 	self.markers = [];
+	self.infoWindows = [];
 
 	this.initializeMap = function () {
 		var myLatlng1 = new google.maps.LatLng(53.65914, 0.072050);
@@ -15,7 +20,7 @@ var myMap = function () {
 
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function (position) {
-				initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+				var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 				self.map.setCenter(initialLocation);
 			});
 		}
@@ -52,7 +57,6 @@ var myMap = function () {
 		// or hover over a pin on a map. They usually contain more information
 		// about a location.
 		var infoWindow = new google.maps.InfoWindow({
-			//content: name + ' ' + windowInfo
 
 			content: "<h5>" + marker.title +
 						"</h5><button type='button' onclick='yelpResponse(" + self.markers.length +  ")'" +
@@ -60,18 +64,29 @@ var myMap = function () {
 						"border='0' alt='yelp btn'></button><br>"
 		});
 
-		// Add event listeners so that markers animate and open info windows when clicked
+		// Add event listeners so that markers animate when clicked
 		google.maps.event.addListener(marker, 'click', function() {
-			infoWindow.open(marker.map, marker);
-			self.toggleBounce(marker);
+			self.infoWindows.forEach(function (element) {
+				element.close();
+			});
+
+			infoWindow.open(this.map, this);
+			self.toggleBounce(this);
 		});
 
+		// Add event listeners to close other info windows and open one for clicked marker
 		google.maps.event.addDomListener(item, 'click', function () {
+			self.infoWindows.forEach(function (element) {
+				element.close();
+			});
+
 			infoWindow.open(marker.map, marker);
 			self.toggleBounce(marker);
 		});
 
+		// add marker and info window to arrays for easy reference and access
 		self.markers.push(marker);
+		self.infoWindows.push(infoWindow);
 
 		// this is where the pin actually gets added to the map.
 		// bounds.extend() takes in a map location object
@@ -84,7 +99,7 @@ var myMap = function () {
 
 	this.toggleBounce = function (marker) {
 
-		if (marker.getAnimation() == null) {
+		if (marker.getAnimation() === null) {
 			marker.setAnimation(google.maps.Animation.BOUNCE);
 
 			setTimeout(function () {
@@ -94,9 +109,13 @@ var myMap = function () {
 	};
 
 	this.filterMap = function (string, list) {
+		self.infoWindows.forEach(function (element) {
+			element.close();
+		});
+
 		if (list.length > 0) {
-			for (var item in list) {
-				var check = list[item];
+			list.forEach (function (item) {
+				var check = item;
 				var toggler = self.markers[check.index];
 
 				if (check.name.indexOf(string) === -1) {
@@ -107,9 +126,9 @@ var myMap = function () {
 						toggler.setVisible(true);
 					}
 				}
-			}
+			});
 		}
-	}
+	};
 
 	// Calls the initializeMap() function when the page loads
 	window.addEventListener('load', self.initializeMap);
@@ -125,7 +144,7 @@ var myMap = function () {
 var yelpResponse = function(index) {
 		var lat = globalMap.markers[index].position.lat();
 		var lon = globalMap.markers[index].position.lng();
-		var name = globalMap.markers[index].title;
+		var locName = globalMap.markers[index].title;
 		globalIndex = index;
 
 		function nonce_generate() {
@@ -133,7 +152,6 @@ var yelpResponse = function(index) {
 		}
 
 		var yelp_url = 'http://api.yelp.com/v2/search';
-		var windowInfo;
 
 		var oauth_params = {
 			oauth_consumer_key: "Q8Pi5pYP5kjoCXHtfzpDhQ",
@@ -142,7 +160,8 @@ var yelpResponse = function(index) {
 			oauth_timestamp: Math.floor(Date.now()/1000),
 			oauth_signature_method: "HMAC-SHA1",
 			oauth_version : '1.0',
-			location: name,
+			sort: 1,
+			location: locName,
 			cll: lat + ', ' + lon,
 			callback: 'cb'
 		};
@@ -157,42 +176,39 @@ var yelpResponse = function(index) {
 			cache: true,
 			dataType: "jsonp",
 			success : function (response) {
-				var name = globalMap.markers[globalIndex].title;
+				var locName = globalMap.markers[globalIndex].title;
 				var array = response.businesses;
 				var bizResponse = "error";
 
-				for (biz in array) {
-					if (name.indexOf(array[biz].location.display_address[0]) !== -1) {
-						bizResponse = array[biz];
-						break;
+				array.forEach(function (biz) {
+					if (locName.indexOf(biz.location.display_address[0]) !== -1) {
+						bizResponse = biz;
 					}
-				}
+				});
+
+				var safety = "";
 
 				if (bizResponse === "error") {
-					alert("Unable to display Yelp information at this time.");
+					bizResponse = array[0];
+					safety = "We could not find your requested business in our records. Here is a nearby recommendation: ";
 				}
-				else {
 
-					var image = bizResponse['image_url'];
-					var name = bizResponse['name'];
-					var address1 = bizResponse['location']['display_address'][0];
-					var address2 = bizResponse['location']['display_address'][1];
-					var tn = bizResponse['display_phone'];
-					var ratingUrl = bizResponse['rating_img_url_small'];
-					var yelpUrl = bizResponse['url'];
+				var image = bizResponse.image_url;
+				var name = bizResponse.name;
+				var address1 = bizResponse.location.display_address[0];
+				var address2 = bizResponse.location.display_address[1];
+				var tn = bizResponse.display_phone;
+				var ratingUrl = bizResponse.rating_img_url_small;
+				var yelpUrl = bizResponse.url;
 
-					bootbox.alert({
-						title: "<img src=" + image + ">" + "&nbsp&nbsp" + name,
-						message: address1 + "<br>" + address2 + "<br>" + tn + "<br><br>" +
-							"<a href=" + yelpUrl + ">Click Here For More Information </a><br>" +
-							"Rating: <img src=" + ratingUrl + "><br><img src='img/yelp.gif'>",
-						closeButton: false,
-						className: "dialog-wrapper"
-					});
-
-					var dialogHolder = $('.modal-dialog');
-					dialogHolder.css({ marginLeft: ($(window).width() - dialogHolder.width()) / 2 });
-				}
+				bootbox.alert({
+					title: "<img src=" + image + ">" + "&nbsp&nbsp" + safety + name,
+					message: address1 + "<br>" + address2 + "<br>" + tn + "<br><br>" +
+						"<a href=" + yelpUrl + ">Click Here For More Information </a><br>" +
+						"Rating: <img src=" + ratingUrl + "><br><img src='img/yelp.gif'>",
+					closeButton: false,
+					className: "dialog-wrapper"
+				});
 			},
 			error: function () {
 				alert("Unable to display Yelp information at this time.");
@@ -220,11 +236,11 @@ var ViewModel = function () {
 	};
 
 	this.filterList = function (string) {
-		list = self.myList();
+		var list = self.myList();
 
 		if (list.length > 0) {
-			for (var item in list) {
-				var check = list[item];
+			list.forEach (function (item) {
+				var check = item;
 				var toggler = $('li').children()[check.index];
 
 				if (check.name.indexOf(string) === -1) {
@@ -233,7 +249,7 @@ var ViewModel = function () {
 				else {
 					toggler.style.display = "block";
 				}
-			}
+			});
 		}
 	};
 

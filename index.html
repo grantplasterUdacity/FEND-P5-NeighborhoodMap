@@ -7,37 +7,41 @@
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 	<title>Project 5: Neighborhood Map</title>
 
+	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-	<div class="displayHead">
-		<h1>Neighborhood Map</h1>
-	</div>
-	<div class="searchbar">
-		<form data-bind="submit: addListItem">
-			Search: <input class="search" type="search" data-bind="textInput: searchTerm" size="65">
-		</form>
-	</div>
-
-	<div class="appArea">
-		<div class="listView">
-			<ul class="item-list" data-bind="foreach: myList">
-				<li>
-					<a href="#" data-bind="text: name">&nbsp;</a>
-				</li>
-			</ul>
+	<div class="container">
+		<div class="row displayHead">
+			<h1>Neighborhood Map</h1>
+		</div>
+		<div class="row searchbar">
+			<form data-bind="submit: addListItem">
+				Search: <input class="search" type="search" data-bind="textInput: searchTerm" size="65"
+				placeholder="(Business or Street Address), City, State">
+			</form>
 		</div>
 
-		<div class="mapdiv">
+		<div class="row appArea">
+			<div class="listView">
+				<ul class="col-xs-2 item-list" data-bind="foreach: myList">
+					<li>
+						<a href="#" data-bind="text: name">&nbsp;</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="mapdiv">
+			</div>
 		</div>
 	</div>
 
 	<script src="js/oauth-signature.js"></script>
-	<script src='js/bootbox.min.js'></script>
 	<script src="js/knockout-3.3.0.js"></script>
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script src='js/bootbox.min.js'></script>
 	<script async src="js/app.js"></script>
 </body>
 
