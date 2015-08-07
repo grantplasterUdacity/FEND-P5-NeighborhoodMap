@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
 	<title>Project 5: Neighborhood Map</title>
 
@@ -11,33 +11,33 @@
 </head>
 
 <body>
-	<div id="displayHead">
+	<div class="displayHead">
 		<h1>Neighborhood Map</h1>
 	</div>
-	<div id="searchbar">
+	<div class="searchbar">
 		<form data-bind="submit: addListItem">
-			Search: <input id="search" type="search" data-bind="textInput: searchTerm" size="65">
+			Search: <input class="search" type="search" data-bind="textInput: searchTerm" size="65">
 		</form>
 	</div>
 
 	<div class="appArea">
-		<div id="listView">
-			<ul id="item-list" data-bind="foreach: myList">
+		<div class="listView">
+			<ul class="item-list" data-bind="foreach: myList">
 				<li>
 					<a href="#" data-bind="text: name">&nbsp;</a>
 				</li>
 			</ul>
 		</div>
 
-		<div id="mapdiv">
+		<div class="mapdiv">
 		</div>
 	</div>
 
-	<script async src="js/jquery.js"></script>
-	<script async src="js/bootstrap.min.js"></script>
 	<script src="js/oauth-signature.js"></script>
-	<script async src='js/bootbox.min.js'></script>
-	<script async src="js/knockout-3.3.0.js"></script>
+	<script src='js/bootbox.min.js'></script>
+	<script src="js/knockout-3.3.0.js"></script>
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 	<script async src="js/app.js"></script>
 </body>
 

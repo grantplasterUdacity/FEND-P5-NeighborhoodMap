@@ -1,6 +1,6 @@
 var myMap = function () {
 	var self = this;
-	this.markers = [];
+	self.markers = [];
 
 	this.initializeMap = function () {
 		var myLatlng1 = new google.maps.LatLng(53.65914, 0.072050);
@@ -10,7 +10,7 @@ var myMap = function () {
 			center: myLatlng1
 		};
 
-		self.map = new google.maps.Map(document.getElementById('mapdiv'), mapOptions);
+		self.map = new google.maps.Map($('.mapdiv')[0], mapOptions);
 		self.service = new google.maps.places.PlacesService(self.map);
 
 		if (navigator.geolocation) {
@@ -60,7 +60,7 @@ var myMap = function () {
 						"border='0' alt='yelp btn'></button><br>"
 		});
 
-		// hmmmm, I wonder what this is about...
+		// Add event listeners so that markers animate and open info windows when clicked
 		google.maps.event.addListener(marker, 'click', function() {
 			infoWindow.open(marker.map, marker);
 			self.toggleBounce(marker);
@@ -69,7 +69,7 @@ var myMap = function () {
 		google.maps.event.addDomListener(item, 'click', function () {
 			infoWindow.open(marker.map, marker);
 			self.toggleBounce(marker);
-		})
+		});
 
 		self.markers.push(marker);
 
@@ -202,12 +202,15 @@ var yelpResponse = function(index) {
 
 var ViewModel = function () {
 	var self = this;
-	globalMap = this.myMap = new myMap();
-	this.searchTerm = ko.observable("");
-	this.myList = ko.observableArray([]);
+	globalMap = self.myMap = new myMap();
+	self.searchTerm = ko.observable("");
+	self.myList = ko.observableArray([]);
 
 	this.addListItem = function (item) {
-		var newItem = { name : self.searchTerm(), index : self.myList().length };
+		var newItem = {
+			name : self.searchTerm(),
+			index : self.myList().length
+		};
 
 		self.myList.push(newItem);
 		self.myMap.doSearch(newItem.name, $('li').children()[newItem.index]);
@@ -234,9 +237,9 @@ var ViewModel = function () {
 		}
 	};
 
-	this.myMap.initializeMap();
+	self.myMap.initializeMap();
 
-	$('#search').on('input', function (string) {
+	$('.search').on('input', function (string) {
 		self.filterList(string.target.value);
 		self.myMap.filterMap(string.target.value, self.myList());
 	});
